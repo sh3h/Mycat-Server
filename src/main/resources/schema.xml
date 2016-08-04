@@ -2,50 +2,48 @@
 <!DOCTYPE mycat:schema SYSTEM "schema.dtd">
 <mycat:schema xmlns:mycat="http://org.opencloudb/" >
 
-	<schema name="TESTDB" checkSQLschema="false" sqlMaxLimit="100">
+	<schema name="A_CAT" checkSQLschema="false" sqlMaxLimit="100">              
 		<!-- auto sharding by id (long) -->
-		<table name="travelrecord" dataNode="dn1,dn2,dn3" rule="auto-sharding-long" />
+<!-- 		<table name="travelrecord" dataNode="dn1,dn2" rule="auto-sharding-long" /> -->
 
 		<!-- global table is auto cloned to all defined data nodes ,so can join 
 			with any table whose sharding node is in the same data node -->
-		<table name="company" primaryKey="ID" dataNode="dn3,dn2,dn1" rule="mod-long"/>
-		<table name="goods" primaryKey="ID" type="global" dataNode="dn1,dn2" />
+		<table name="company" primaryKey="ID" dataNode="dn2,dn1" needAddLimit="false" rule="mod-long"/>
+	    <table name="MR_RECORD" primaryKey="RECORD_ID" dataNode="dn1$0-13" needAddLimit="false" rule="by-bill-month"/>
+		<!-- <table name="goods" primaryKey="ID" type="global" dataNode="dn1,dn2" /> -->
 		<!-- random sharding using mod sharind rule -->
-		<table name="hotnews" primaryKey="ID" dataNode="dn1,dn2,dn3"
-			rule="mod-long" />
+		<!-- <table name="hotnews" primaryKey="ID" dataNode="dn1,dn2" rule="mod-long" /> -->
 		<!-- <table name="dual" primaryKey="ID" dataNode="dnx,dnoracle2" type="global" 
 			needAddLimit="false"/> <table name="worker" primaryKey="ID" dataNode="jdbc_dn1,jdbc_dn2,jdbc_dn3" 
 			rule="mod-long" /> -->
-		<table name="employee" primaryKey="ID" dataNode="dn1,dn2"
-			rule="sharding-by-intfile" />
-		<table name="customer" primaryKey="ID" dataNode="dn1,dn2"
-			rule="sharding-by-intfile">
+<!-- 		<table name="employee" primaryKey="ID" dataNode="dn1,dn2" rule="sharding-by-intfile" />
+		<table name="customer" primaryKey="ID" dataNode="dn1,dn2" rule="sharding-by-intfile">
 			<childTable name="orders" primaryKey="ID" joinKey="customer_id"
-				parentKey="id">
+				parentKey="id">                                           
 				<childTable name="order_items" joinKey="order_id"
 					parentKey="id" />
 			</childTable>
 			<childTable name="customer_addr" primaryKey="ID" joinKey="customer_id"
 				parentKey="id" />
-		</table>
+		</table> -->
 		<!-- <table name="oc_call" primaryKey="ID" dataNode="dn1$0-743" rule="latest-month-calldate" 
 			/> -->
-	</schema>
+	</schema>                                                   
 	<!-- <dataNode name="dn1$0-743" dataHost="localhost1" database="db$0-743" 
 		/> -->
-	<dataNode name="dn1" dataHost="localhost1" database="db1" />
-	<dataNode name="dn2" dataHost="localhost1" database="db2" />
-	<dataNode name="dn3" dataHost="localhost1" database="db3" />
+	<dataNode name="dn1" dataHost="localhost1" database="A_CAT_1" />
+	<dataNode name="dn2" dataHost="localhost1" database="A_CAT_2" />
+	<dataNode name="dn1$0-13" dataHost="localhost1" database="A_CAT_$0-13" />
 	<!--<dataNode name="dn4" dataHost="sequoiadb1" database="SAMPLE" />
 	 <dataNode name="jdbc_dn1" dataHost="jdbchost" database="db1" /> 
 	<dataNode	name="jdbc_dn2" dataHost="jdbchost" database="db2" /> 
 	<dataNode name="jdbc_dn3" 	dataHost="jdbchost" database="db3" /> -->
-	<dataHost name="localhost1" maxCon="1000" minCon="10" balance="0"
-		writeType="0" dbType="mysql" dbDriver="native" switchType="1"  slaveThreshold="100">
-		<heartbeat>select user()</heartbeat>
+	<dataHost name="localhost1" maxCon="1000" minCon="1" balance="0" writeType="0" dbType="sqlserver" dbDriver="jdbc">
+		<heartbeat></heartbeat>
+		<connectionInitSql></connectionInitSql>
 		<!-- can have multi write hosts -->
-		<writeHost host="hostM1" url="10.202.4.39:3306" user="root"
-			password="sf123456">
+		<writeHost host="hostM1" url="jdbc:sqlserver://128.1.10.4:1433" user="sa"
+			password="p@ssw0rd">
 			<!-- can have multi read hosts -->
 			<!--<readHost host="hostS2" url="192.168.1.200:3306" user="root" password="xxx" />-->
 		</writeHost>

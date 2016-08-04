@@ -29,10 +29,10 @@
 			<algorithm>hash-int</algorithm>
 		</rule>
 	</tableRule>
-	<tableRule name="auto-sharding-long">
+	<tableRule name="by-bill-month">
 		<rule>
-			<columns>id</columns>
-			<algorithm>rang-long</algorithm>
+			<columns>BILLING_MONTH</columns>
+			<algorithm>bill-month</algorithm>
 		</rule>
 	</tableRule>
 	<tableRule name="mod-long">
@@ -87,13 +87,14 @@
 		class="org.opencloudb.route.function.PartitionByFileMap">
 		<property name="mapFile">partition-hash-int.txt</property>
 	</function>
-	<function name="rang-long"
+	<function name="bill-month"
 		class="org.opencloudb.route.function.AutoPartitionByLong">
-		<property name="mapFile">autopartition-long.txt</property>
+		<property name="mapFile">partition-bill-month.txt</property>
+		<!-- <property name="defaultNode">0</property> -->
 	</function>
 	<function name="mod-long" class="org.opencloudb.route.function.PartitionByMod">
 		<!-- how many data nodes -->
-		<property name="count">3</property>
+		<property name="count">2</property>
 	</function>
 
 	<function name="func1" class="org.opencloudb.route.function.PartitionByLong">
