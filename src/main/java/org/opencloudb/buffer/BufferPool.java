@@ -52,7 +52,7 @@ public final class BufferPool {
 	private final long threadLocalCount;
 	private final long capactiy;
 	private long totalBytes = 0;
-	private long totalCounts = 0;
+	private long totalCounts = 0; 
 
 	public BufferPool(long bufferSize, int chunkSize, int threadLocalPercent) {
 		this.chunkSize = chunkSize;
